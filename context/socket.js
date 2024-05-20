@@ -5,7 +5,7 @@ const SocketContext = createContext(null);
 
 export const useSocket = () => {
   const socket = useContext(SocketContext);
-  return socket;
+  return socket; 
 };
 
 export const SocketProvider = (props) => {
