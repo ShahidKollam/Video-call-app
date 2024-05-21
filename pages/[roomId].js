@@ -8,6 +8,8 @@ import Player from "@/component/Player";
 import usePlayer from "@/hooks/usePlayer";
 import { useRouter } from "next/router";
 import { cloneDeep } from "lodash";
+import CopySection from "@/component/CopySection";
+
 
 const Room = () => {
   const socket = useSocket();
@@ -171,6 +173,8 @@ const Room = () => {
           );
         })}
       </div>
+
+      <CopySection roomId={roomId} />
 
       <Bottom
         muted={playerHighlighted?.muted}
