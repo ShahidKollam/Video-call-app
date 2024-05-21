@@ -2,7 +2,7 @@ import Bottom from "@/component/Bottom";
 import styles from "@/styles/room.module.css";
 import { useSocket } from "@/context/socket";
 import usePeer from "@/hooks/usePeer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useMediaStream from "@/hooks/useMediaStream";
 import Player from "@/component/Player";
 import usePlayer from "@/hooks/usePlayer";
@@ -21,7 +21,9 @@ const Room = () => {
     nonHighlightedPlayers,
     toogleAudio,
     toogleVideo,
-  } = usePlayer(myId, roomId);
+    leaveRoom,
+  } = usePlayer(myId, roomId, peer);
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
     if (!socket || !peer || !stream) return;
@@ -41,6 +43,11 @@ const Room = () => {
             playing: true,
           },
         }));
+
+        setUsers((prev) => ({
+          ...prev,
+          [newUser]: call
+        }))
       });
     };
 
@@ -69,6 +76,13 @@ const Room = () => {
             playing: true,
           },
         }));
+
+        
+        setUsers((prev) => ({
+          ...prev,
+          [calledId]: call
+        }))
+
       });
     });
   }, [peer, setPlayer, stream]);
@@ -110,14 +124,25 @@ const Room = () => {
       });
     };
 
+    const handleUserLeave = (userId) => {
+      console.log(`user ${userId} is leaving the room`);
+      users[userId]?.close()
+      const playersCopy = cloneDeep(player);
+      delete playersCopy[userId];
+      setPlayer(playersCopy);
+    }
+
     socket.on("user-toogle-audio", handleToggleAudio);
     socket.on("user-toogle-video", handleToggleVideo);
+    socket.on("user-leave", handleUserLeave);
 
     return () => {
       socket.off("user-toogle-audio", handleToggleAudio);
       socket.off("user-toogle-video", handleToggleVideo);
+      socket.off("user-leave", handleUserLeave);
+
     };
-  }, [socket, setPlayer]);
+  }, [socket, setPlayer, users, player]);
 
   return (
     <>
