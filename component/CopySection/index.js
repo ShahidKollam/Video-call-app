@@ -5,7 +5,7 @@ import styles from "@/component/CopySection/index.module.css";
 
 const CopySection = (props) => {
   const { roomId } = props;
-
+ 
   return (
     <div className={styles.copyContainer}>
       <div className={styles.copyHeading}>Copy Room ID:</div>
@@ -18,6 +18,6 @@ const CopySection = (props) => {
       </div>
     </div>
   );
-};
+};  
 
 export default CopySection;

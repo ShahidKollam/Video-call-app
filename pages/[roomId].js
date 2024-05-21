@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { cloneDeep } from "lodash";
 import CopySection from "@/component/CopySection";
 
-
+  
 const Room = () => {
   const socket = useSocket();
   const { peer, myId } = usePeer();
