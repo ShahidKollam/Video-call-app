@@ -16,8 +16,17 @@ const SocketHandler = (req,res) => {
                 console.log(`a new user ${id} joined romm ${roomId}`);
 
                 socket.join(roomId)
-
                 socket.broadcast.to(roomId).emit('user-connected', id)
+            })
+
+            socket.on('user-toogle-audio', (userId, roomId) => {
+                socket.join(roomId)
+                socket.broadcast.to(roomId).emit('user-toogle-audio', userId)
+            })
+            
+            socket.on('user-toogle-video', (userId, roomId) => {
+                socket.join(roomId)
+                socket.broadcast.to(roomId).emit('user-toogle-video', userId)
             })
         })
     }       
